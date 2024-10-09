@@ -5,7 +5,10 @@
       <BaseSide />
       <div w="full" py="4">
         <Logos my="4" />
-        <HelloWorld msg="Hello Vue 3 + Element Plus + Vite" />
+        <HelloWorld
+          msg="Hello, this is Reihi's personal page.
+        And this page is in building."
+        />
       </div>
     </div>
   </el-config-provider>
