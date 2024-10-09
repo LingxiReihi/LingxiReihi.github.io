@@ -21,9 +21,9 @@ const value1 = ref(true);
     <h1 color="$ep-color-primary">{{ msg }}</h1>
 
     <p>
-      See
-      <a href="https://element-plus.org" target="_blank">element-plus</a> for more
-      information.
+      查看
+      <a href="https://blog.csdn.net/qq_62597193?type=blog" target="_blank">泠曦的CSDN主页</a>
+      获取更多信息
     </p>
 
     <!-- example components -->
