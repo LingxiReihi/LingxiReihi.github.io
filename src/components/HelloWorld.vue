@@ -23,7 +23,6 @@ const value1 = ref(true);
     <p>
       查看
       <a href="https://blog.csdn.net/qq_62597193?type=blog" target="_blank">泠曦的CSDN主页</a>
-      获取更多信息
     </p>
     <p>以下是WEBGL测试，其中WASD操纵移动，SPACE跳跃，J攻击</p>
     <div align="center">
