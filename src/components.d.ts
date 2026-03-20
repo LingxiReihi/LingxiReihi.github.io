@@ -26,5 +26,6 @@ declare module 'vue' {
     InfoPage: typeof import('./components/InfoPage.vue')['default']
     Logos: typeof import('./components/Logos.vue')['default']
     Markdown: typeof import('./components/layouts/Markdown.vue')['default']
+    ProfileCard: typeof import('./components/ProfileCard.vue')['default']
   }
 }

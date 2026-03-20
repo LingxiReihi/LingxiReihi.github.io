@@ -5,11 +5,7 @@
       <div w="full" py="4">
         <!-- 主页内容 -->
         <div v-if="currentPage === 'home'">
-          <Logos my="4" />
-          <HelloWorld
-            msg="Hello, this is Reihi's personal page.
-          And this page is in building."
-          />
+          <ProfileCard />
         </div>
         <!-- 信息显示页面 -->
         <div v-else-if="currentPage === 'info'">
