@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>personal-web · 访客旅程 — User Journey Map</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+    body { padding: 32px; background: #FAFAF7; color: #1F2937; }
+    .header { margin-bottom: 24px; }
+    .title { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; color: #6B7280; }
+    .persona-card { display: inline-flex; align-items: center; padding: 12px 20px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin: 16px 0 32px; }
+    .persona-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #6366F1, #EC4899); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
+    .persona-info { font-size: 13px; }
+    .persona-info b { display: block; font-size: 15px; color: #111827; }
+    .persona-info span { color: #6B7280; }
+    .jtbd { font-style: italic; padding: 12px 16px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 4px; margin-bottom: 32px; font-size: 14px; }
+    .journey-grid { display: grid; grid-template-columns: 120px repeat({{stage_count}}, 1fr); gap: 1px; background: #E5E7EB; border-radius: 12px; overflow: hidden; }
+    .grid-row { display: contents; }
+    .row-label, .stage-cell { background: white; padding: 14px 12px; font-size: 12px; }
+    .row-label { background: #F3F4F6; font-weight: 600; color: #4B5563; display: flex; align-items: center; }
+    .stage-header { background: #1F2937; color: white; padding: 16px 12px; font-size: 13px; font-weight: 600; text-align: center; }
+    .stage-header .emoji { font-size: 24px; display: block; margin-bottom: 4px; }
+    .stage-cell ul { list-style: none; }
+    .stage-cell li { padding: 4px 0; line-height: 1.4; }
+    .stage-cell li:before { content: "·"; color: #9CA3AF; margin-right: 6px; }
+    .emotion-cell { font-size: 28px; text-align: center; padding: 16px; }
+    .pain-bar { height: 4px; background: linear-gradient(to right, #10B981, #F59E0B, #EF4444); border-radius: 2px; margin-top: 8px; }
+    .pain-indicator { height: 8px; margin-top: 4px; display: flex; gap: 2px; }
+    .pain-indicator span { flex: 1; height: 100%; background: #E5E7EB; border-radius: 1px; }
+    .pain-indicator span.active { background: currentColor; }
+    .key-moment-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-top: 4px; }
+    .key-moment-badge.truth { background: #EFF6FF; color: #2563EB; }
+    .key-moment-badge.dropout { background: #FEE2E2; color: #DC2626; }
+    .key-moment-badge.delight { background: #D1FAE5; color: #059669; }
+    .key-moment-badge.recovery { background: #FEF3C7; color: #D97706; }
+    .opportunity { background: #ECFDF5; padding: 6px 8px; border-radius: 4px; font-size: 11px; color: #047857; margin: 3px 0; }
+    .quote { font-style: italic; color: #4B5563; padding: 6px 8px; background: #F9FAFB; border-left: 3px solid #D1D5DB; font-size: 11px; margin: 3px 0; }
+    .curve-section { margin-top: 32px; padding: 24px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .curve-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+    .curve-svg { width: 100%; height: 120px; }
+    .footer { margin-top: 24px; text-align: center; color: #9CA3AF; font-size: 11px; }
+    @media print { body { padding: 16px; } .journey-grid { page-break-inside: avoid; } }
+    .toolbar { position: fixed; top: 16px; right: 16px; display: flex; gap: 8px; }
+    .toolbar button { padding: 8px 16px; background: #1F2937; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
+    .toolbar button:hover { background: #374151; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button onclick="window.print()">打印 / PDF</button>
+  </div>
+
+  <div class="header">
+    <div class="title">personal-web · 访客旅程 — User Journey Map</div>
+    <div class="subtitle">生成时间: 2026-09-22 · 数据源: brief.json + scope.json + flow-web.json（无 probe/signal/audit 数据 → 假设性旅程） · <span class="key-moment-badge dropout">假设性旅程：未经用户研究验证</span></div>
+  </div>
+
+  <div class="persona-card">
+    <div class="persona-avatar">访</div>
+    <div class="persona-info">
+      <b>访客（假设 persona，待 Probe 验证）</b>
+      <span>中文技术/艺术内容访客 · 移动端为主 · 百度搜索为主要入口</span>
+    </div>
+  </div>
+
+  <div class="jtbd">当我要查找某个技术或艺术创作话题时，我想快速找到「真人写的、写得清楚的」内容并判断这位作者是否值得记住，而不是把时间耗在加载慢、广告多、正文搜不到的站路上。</div>
+
+  <div class="journey-grid" style="grid-template-columns: 120px repeat(6, 1fr);">
+    <div class="row-label"></div>
+    <div class="stage-header"><span class="emoji">👀</span>发现</div>
+    <div class="stage-header"><span class="emoji">🚪</span>首次到访</div>
+    <div class="stage-header"><span class="emoji">📖</span>阅读消费</div>
+    <div class="stage-header"><span class="emoji">🗂️</span>延伸了解</div>
+    <div class="stage-header"><span class="emoji">🔖</span>回访</div>
+    <div class="stage-header"><span class="emoji">📣</span>推荐</div>
+    <div class="row-label">用户目标</div>
+    <div class="stage-cell">搜索话题时看到本站结果</div>
+    <div class="stage-cell">10 秒判断这站值不值得留</div>
+    <div class="stage-cell">读完文章 / 看清作品</div>
+    <div class="stage-cell">全面了解作者其人</div>
+    <div class="stage-cell">有新内容时能再遇到这个站</div>
+    <div class="stage-cell">把好内容转给同事/群里</div>
+    <div class="row-label">用户行动</div>
+    <div class="stage-cell"><ul><li>搜技术/作品关键词</li><li>扫 SERP 标题与摘要</li><li>点击进站</li></ul></div>
+    <div class="stage-cell"><ul><li>看 Hero 一句话定位</li><li>扫精选内容区</li><li>决定去留</li></ul></div>
+    <div class="stage-cell"><ul><li>读博客长文或看 3D 模型</li><li>翻代码块与渲染图</li><li>操作旋转/灯箱</li></ul></div>
+    <div class="stage-cell"><ul><li>刷杂谈时间线</li><li>进 About 看经历技能</li></ul></div>
+    <div class="stage-cell"><ul><li>浏览器收藏</li><li>订阅 RSS</li><li>再搜作者名</li></ul></div>
+    <div class="stage-cell"><ul><li>复制链接到群</li><li>对方点开看卡片</li></ul></div>
+    <div class="row-label">触点</div>
+    <div class="stage-cell"><ul><li>百度搜索 SERP</li><li>RSS 聚合</li><li>ArtStation/B站 外链</li></ul></div>
+    <div class="stage-cell"><ul><li>落地主页（预渲染首屏）</li><li>移动端首屏</li></ul></div>
+    <div class="stage-cell"><ul><li>/blog/:slug 详情</li><li>/models/:slug（model-viewer/视频）</li></ul></div>
+    <div class="stage-cell"><ul><li>/chats 时间线</li><li>/about 个人主页</li></ul></div>
+    <div class="stage-cell"><ul><li>浏览器历史/收藏</li><li>/feed.xml</li></ul></div>
+    <div class="stage-cell"><ul><li>OG 分享卡片</li><li>微信/QQ 链接预览</li></ul></div>
+    <div class="row-label">用户心声</div>
+    <div class="stage-cell"><ul><li>"这条结果是不是我要找的"</li><li>"这个站是谁做的，写得清楚吗"</li></ul></div>
+    <div class="stage-cell"><ul><li>"加载超过 3 秒我就走"</li><li>"有点意思，有我想读的东西"</li></ul></div>
+    <div class="stage-cell"><ul><li>"这篇有目录吗"</li><li>"手机上模型转得动吗"</li><li>"代码高亮看得清吗"</li></ul></div>
+    <div class="stage-cell"><ul><li>"这人平时聊什么"</li><li>"想找他合作，怎么联系"</li></ul></div>
+    <div class="stage-cell"><ul><li>"没有订阅入口，只能靠搜"</li><li>"他更新了吗，再搜一次看看"</li></ul></div>
+    <div class="stage-cell"><ul><li>"这个链接发出去，预览图好不好看"</li></ul></div>
+    <div class="row-label">情绪</div>
+    <div class="stage-cell emotion-cell">😐<div class="pain-indicator" style="color:#34D399"><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span><span class=""></span></div></div>
+    <div class="stage-cell emotion-cell">🙂<div class="pain-indicator" style="color:#34D399"><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span><span class=""></span></div></div>
+    <div class="stage-cell emotion-cell">🙂<div class="pain-indicator" style="color:#34D399"><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span><span class=""></span></div><span class="key-moment-badge truth" title="首篇文章读完/3D 交互成功 = 去留决策点">关键时刻</span></div>
+    <div class="stage-cell emotion-cell">😐<div class="pain-indicator" style="color:#F59E0B"><span class="active"></span><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span></div></div>
+    <div class="stage-cell emotion-cell">😕<div class="pain-indicator" style="color:#F59E0B"><span class="active"></span><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span></div><span class="key-moment-badge dropout" title="无订阅钩子，回访断链；后续靠搜索再曝光">流失风险</span></div>
+    <div class="stage-cell emotion-cell">😊<div class="pain-indicator" style="color:#34D399"><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span><span class=""></span></div></div>
+    <div class="row-label">痛点</div>
+    <div class="stage-cell"><ul><li>HK 服务器国内访问慢，爬虫与真人同受影响</li><li>无备案站点在百度权重折损，排名靠后</li><li>摘要不友好则点击率下降</li></ul></div>
+    <div class="stage-cell"><ul><li>慢连接下首屏 LCP 超标即流失</li><li>移动端导航收进 Drawer 后导流变弱</li></ul></div>
+    <div class="stage-cell"><ul><li>glb 大文件弱网加载失败</li><li>低端机 WebGL 不兼容</li><li>深色主题代码块对比不足</li></ul></div>
+    <div class="stage-cell"><ul><li>杂谈低频更新时页面显空</li><li>About 仅社交链接，无邮箱时联系转化路径长</li></ul></div>
+    <div class="stage-cell"><ul><li>无账号体系，回访全靠搜索再曝光</li><li>RSS 对普通访客门槛高</li></ul></div>
+    <div class="stage-cell"><ul><li>国内 IM 对 OG 抓取不稳定</li></ul></div>
+    <div class="row-label">用户原话</div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="row-label">设计机会</div>
+    <div class="stage-cell"><div class="opportunity">💡 title/description SEO 规范 + JSON-LD（B1 收录可见）</div><div class="opportunity">💡 向资源平台提交 sitemap.txt 双通道</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 vite-ssg 首屏直出 + 骨架屏</div><div class="opportunity">💡 精选区三区块强导流 CTA</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 3D 加载失败降级渲染图（Flow C 已设计）</div><div class="opportunity">💡 TOC 折叠浮动按钮 + Shiki 双主题</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 空态对访客隐藏（仅后台可见引导）</div><div class="opportunity">💡 GitHub issue/邮箱链接的防爬拼接策略打磨</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 RSS + 百度 sitemap lastmod 保持新鲜度曝光</div><div class="opportunity">💡 文章尾「同标签系列」制造站内回访环</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 每内容页 og:image 用封面/webp 缩略图</div><div class="opportunity">💡 一键复制链接微交互</div></div>
+  </div>
+
+  <div class="curve-section">
+    <div class="curve-title">📈 情感曲线（Pain Level over Journey）</div>
+    <svg class="curve-svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <line x1="0" y1="20" x2="1200" y2="20" stroke="#E5E7EB" stroke-dasharray="2" />
+      <line x1="0" y1="60" x2="1200" y2="60" stroke="#E5E7EB" stroke-dasharray="2" />
+      <line x1="0" y1="100" x2="1200" y2="100" stroke="#E5E7EB" stroke-dasharray="2" />
+      <polyline points="0,35 240,35 480,35 720,60 960,60 1200,35" fill="none" stroke="#6366F1" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+      <circle cx="0" cy="35" r="6" fill="#34D399" stroke="white" stroke-width="2" />
+      <circle cx="240" cy="35" r="6" fill="#34D399" stroke="white" stroke-width="2" />
+      <circle cx="480" cy="35" r="6" fill="#34D399" stroke="white" stroke-width="2" />
+      <circle cx="720" cy="60" r="6" fill="#F59E0B" stroke="white" stroke-width="2" />
+      <circle cx="960" cy="60" r="6" fill="#F59E0B" stroke="white" stroke-width="2" />
+      <circle cx="1200" cy="35" r="6" fill="#34D399" stroke="white" stroke-width="2" />
+    </svg>
+  </div>
+
+  <div class="footer">
+    Generated by SparkSkillsHub Journey Skill · Persona: 访客（假设 persona，待 Probe 验证） · 6 stages
+  </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+[project]
+name = "personal-web-backend"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.141",
+  "uvicorn[standard]",
+  "sqlalchemy[asyncio]>=2.0",
+  "aiosqlite",
+  "alembic",
+  "pydantic-settings",
+  "PyJWT",
+  "bcrypt",
+  "cryptography>=45",
+  "python-multipart",
+  "httpx",
+  "pillow",
+  "markdown-it-py>=3.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

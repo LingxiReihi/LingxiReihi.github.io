@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>动态背景模板选型 · personal-web</title>
+<style>
+:root, [data-theme="dark"] {
+  --c-bg:#0b1220; --c-surface:#111a2e; --c-elevated:#18233c;
+  --c-text:#e6edf3; --c-text-2:#9fb0c3; --c-text-3:#5f7185;
+  --c-border:#1f2c47; --c-primary:#39c5bb; --c-primary-2:#5ee0d6;
+  --c-glow:rgb(57 197 187 / .18); --c-glow-strong:rgb(57 197 187 / .32);
+}
+[data-theme="light"] {
+  --c-bg:#f8fafc; --c-surface:#fff; --c-elevated:#f1f5f9;
+  --c-text:#0f172a; --c-text-2:#475569; --c-text-3:#94a3b8;
+  --c-border:#e2e8f0; --c-primary:#0d9488; --c-primary-2:#14b8a6;
+  --c-glow:rgb(13 148 136 / .12); --c-glow-strong:rgb(13 148 136 / .22);
+}
+* { margin:0; padding:0; box-sizing:border-box }
+body { background:var(--c-bg); color:var(--c-text); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; transition:background .3s }
+
+/* ── 背景层（固定全屏，位于内容之下）── */
+#bg { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none }
+#bg canvas { position:absolute; inset:0; width:100%; height:100% }
+.layer { position:absolute; inset:0; display:none }
+.layer.active { display:block }
+
+/* 2. 极光 */
+.aurora i { position:absolute; display:block; border-radius:50%; filter:blur(90px); opacity:.5; mix-blend-mode:screen }
+[data-theme="light"] .aurora i { mix-blend-mode:multiply; opacity:.28 }
+.aurora i:nth-child(1){ width:55vw; height:55vw; left:-15vw; top:-20vw; background:radial-gradient(circle at 30% 40%, var(--c-primary), transparent 65%); animation:drift1 26s ease-in-out infinite alternate }
+.aurora i:nth-child(2){ width:45vw; height:45vw; right:-12vw; top:5vh; background:radial-gradient(circle at 60% 50%, #4c6fff, transparent 65%); animation:drift2 34s ease-in-out infinite alternate }
+.aurora i:nth-child(3){ width:40vw; height:40vw; left:22vw; bottom:-18vw; background:radial-gradient(circle at 50% 60%, var(--c-primary-2), transparent 65%); animation:drift3 30s ease-in-out infinite alternate }
+@keyframes drift1 { to { transform:translate(14vw,10vh) scale(1.15) } }
+@keyframes drift2 { to { transform:translate(-12vw,16vh) scale(.9) } }
+@keyframes drift3 { to { transform:translate(8vw,-12vh) scale(1.1) } }
+
+/* 4. 赛博透视网格 */
+.cybergrid { perspective:420px; perspective-origin:50% 32% }
+.cybergrid .plane { position:absolute; left:-60%; right:-60%; bottom:-42%; height:150%;
+  background-image:linear-gradient(var(--c-glow-strong) 1px, transparent 1px), linear-gradient(90deg, var(--c-glow-strong) 1px, transparent 1px);
+  background-size:56px 56px; transform:rotateX(72deg); animation:gridmove 4.5s linear infinite; mask-image:linear-gradient(to top, #000 8%, transparent 72%) }
+@keyframes gridmove { to { background-position:0 56px, 0 0 } }
+.cybergrid .horizon { position:absolute; left:0; right:0; top:34%; height:1px; background:linear-gradient(90deg, transparent, var(--c-primary), transparent); box-shadow:0 0 24px 6px var(--c-glow) }
+
+/* 5. 流光波纹（SVG） */
+.waves svg { position:absolute; bottom:0; left:0; width:200%; height:62% }
+.waves path { fill:none; stroke-width:1.6 }
+.waves .w1 { stroke:var(--c-primary); opacity:.5; animation:wave 14s linear infinite }
+.waves .w2 { stroke:var(--c-primary-2); opacity:.3; animation:wave 19s linear infinite reverse }
+.waves .w3 { stroke:#4c6fff; opacity:.25; animation:wave 24s linear infinite }
+@keyframes wave { to { transform:translateX(-50%) } }
+
+/* 6. 鼠标柔光 */
+.cursor-glow .dots { position:absolute; inset:0;
+  background-image:radial-gradient(var(--c-glow-strong) 1.2px, transparent 1.2px); background-size:26px 26px; opacity:.55 }
+.cursor-glow .glow { position:absolute; width:520px; height:520px; border-radius:50%;
+  background:radial-gradient(circle at 50% 50%, var(--c-glow-strong), transparent 62%);
+  transform:translate(-50%,-50%); transition:left .18s ease-out, top .18s ease-out }
+
+/* ── 选择器工具条 ── */
+.toolbar { position:sticky; top:0; z-index:10; backdrop-filter:blur(10px); background:var(--c-glass); border-bottom:1px solid var(--c-border); padding:12px 20px; display:flex; flex-wrap:wrap; gap:8px; align-items:center }
+.toolbar b { font-size:14px; margin-right:6px }
+.pill { border:1px solid var(--c-border); color:var(--c-text-2); background:var(--c-surface); border-radius:999px; padding:6px 14px; font-size:13px; cursor:pointer; transition:.18s }
+.pill:hover { border-color:var(--c-primary); color:var(--c-text) }
+.pill.on { border-color:var(--c-primary); background:var(--c-glow); color:var(--c-primary); font-weight:600 }
+#themeBtn { margin-left:auto }
+#info { width:100%; font-size:12px; color:var(--c-text-3); line-height:1.7 }
+#info b { color:var(--c-text-2) }
+
+/* ── 模拟博客内容 ── */
+main { position:relative; z-index:1 }
+.hero { max-width:1080px; margin:0 auto; padding:84px 24px 64px }
+.hero .k { letter-spacing:.2em; font-size:13px; color:var(--c-primary) }
+.hero h1 { font-size:52px; margin:14px 0 10px }
+.hero p { color:var(--c-text-2); font-size:17px }
+.hero .btns { margin-top:28px; display:flex; gap:12px }
+.btn { border-radius:10px; padding:11px 22px; font-size:14px; cursor:pointer; border:1px solid var(--c-border); background:var(--c-surface); color:var(--c-text-2) }
+.btn.p { background:var(--c-primary); border-color:var(--c-primary); color:#04222b; font-weight:600 }
+.cards { max-width:1080px; margin:0 auto; padding:0 24px 90px; display:grid; gap:20px; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)) }
+.card { background:var(--c-glass); backdrop-filter:blur(8px); border:1px solid var(--c-border); border-radius:14px; padding:20px; transition:.2s }
+.card:hover { border-color:var(--c-primary); transform:translateY(-3px) }
+.card .thumb { height:150px; border-radius:9px; margin-bottom:14px; background:linear-gradient(135deg, var(--c-elevated), var(--c-glow)), var(--c-elevated) }
+.card h3 { font-size:16px } .card p { margin-top:8px; font-size:13px; color:var(--c-text-2); line-height:1.7 }
+@media (prefers-reduced-motion: reduce) { * { animation-duration:.01s !important; animation-iteration-count:1 !important } }
+</style>
+</head>
+<body>
+
+<div id="bg">
+  <div class="layer" id="l-particles"><canvas id="cv-particles"></canvas></div>
+  <div class="layer aurora" id="l-aurora"><i></i><i></i><i></i></div>
+  <div class="layer" id="l-stars"><canvas id="cv-stars"></canvas></div>
+  <div class="layer cybergrid" id="l-grid"><div class="plane"></div><div class="horizon"></div></div>
+  <div class="layer waves" id="l-waves">
+    <svg viewBox="0 0 2880 400" preserveAspectRatio="none">
+      <path class="w1" d="M0 200 Q 180 120 360 200 T 720 200 T 1080 200 T 1440 200 T 1800 200 T 2160 200 T 2520 200 T 2880 200"/>
+      <path class="w2" d="M0 260 Q 180 190 360 260 T 720 260 T 1080 260 T 1440 260 T 1800 260 T 2160 260 T 2520 260 T 2880 260"/>
+      <path class="w3" d="M0 320 Q 180 260 360 320 T 720 320 T 1080 320 T 1440 320 T 1800 320 T 2160 320 T 2520 320 T 2880 320"/>
+    </svg>
+  </div>
+  <div class="layer cursor-glow" id="l-cursor"><div class="dots"></div><div class="glow" id="cg"></div></div>
+</div>
+
+<div class="toolbar">
+  <b>动态背景选型</b>
+  <button class="pill on" data-l="particles">① 粒子星座</button>
+  <button class="pill" data-l="aurora">② 极光流光</button>
+  <button class="pill" data-l="stars">③ 星空流星</button>
+  <button class="pill" data-l="grid">④ 赛博网格</button>
+  <button class="pill" data-l="waves">⑤ 流光波纹</button>
+  <button class="pill" data-l="cursor">⑥ 鼠标柔光</button>
+  <button class="pill" id="themeBtn">☀ 亮色</button>
+  <p id="info"></p>
+</div>
+
+<main>
+  <section class="hero">
+    <p class="k">PERSONAL SITE</p>
+    <h1>Yimu</h1>
+    <p>写代码，也做 3D —— 一个工程师的个人角落</p>
+    <div class="btns"><button class="btn p">阅读博客</button><button class="btn">查看作品</button></div>
+  </section>
+  <section class="cards">
+    <div class="card"><div class="thumb"></div><h3>静态站与百度收录的兼容之路</h3><p>vite-ssg 预渲染 + sitemap + 主动推送实践。正文卡片在动态背景上应保持玻璃拟态可读性。</p></div>
+    <div class="card"><div class="thumb"></div><h3>Blender 布线笔记</h3><p>拓扑、四边面与细分修改器的取舍。背景动效不应干扰阅读与代码块。</p></div>
+    <div class="card"><div class="thumb"></div><h3>科幻走廊 · 场景渲染</h3><p>Light map 2048 采样收敛记录。可切换亮/暗模式检查两种主题下的效果。</p></div>
+  </section>
+</main>
+
+<script>
+const INFO = {
+  particles: '<b>粒子星座网络</b> · Canvas 粒子 + 近邻连线，鼠标吸附扰动。科技感最强，适合极客定位；CPU 占用中等（粒子数随视口面积缩放，页面不可见时自动暂停）。',
+  aurora: '<b>极光流光</b> · 三团模糊色斑缓慢漂移，纯 CSS 零 JS，性能最好；氛围柔和，暗色下最出彩，亮色下自动降饱和。',
+  stars: '<b>星空流星</b> · Canvas 星点闪烁 + 随机流星划过，安静耐看；适合夜间氛围，性能低耗（约 120 星）。',
+  grid: '<b>赛博透视网格</b> · CSS 3D 透视地面网格向前滚动 + 地平线光晕，风格最强烈、复古未来感；纯 CSS，注意与正文的视觉竞争，建议低透明度。',
+  waves: '<b>流光波纹</b> · 三层 SVG 曲线反向平移，克制的流动感；纯 CSS/SVG，适合想要「动但不抢戏」的折中选择。',
+  cursor: '<b>鼠标柔光</b> · 点阵底纹 + 跟随光标的大柔光斑，交互感强、成本极低；移动端无光标时退化为静态点阵（可叠加其他背景）。',
+}
+const $ = (s) => document.querySelector(s)
+const pills = [...document.querySelectorAll('.pill[data-l]')]
+let current = 'particles'
+function show(name) {
+  current = name
+  document.querySelectorAll('.layer').forEach(l => l.classList.toggle('active', l.id === 'l-' + name))
+  pills.forEach(p => p.classList.toggle('on', p.dataset.l === name))
+  $('#info').innerHTML = INFO[name]
+}
+pills.forEach(p => p.addEventListener('click', () => show(p.dataset.l)))
+$('#themeBtn').addEventListener('click', () => {
+  const el = document.documentElement
+  const dark = el.dataset.theme === 'dark'
+  el.dataset.theme = dark ? 'light' : 'dark'
+  $('#themeBtn').textContent = dark ? '🌙 暗色' : '☀ 亮色'
+})
+show('particles')
+
+/* ── ① 粒子星座 ── */
+const pcv = $('#cv-particles'), pctx = pcv.getContext('2d')
+let parts = [], pm = { x: -1e4, y: -1e4 }, pRun = true
+function pResize() {
+  pcv.width = innerWidth * devicePixelRatio; pcv.height = innerHeight * devicePixelRatio
+  const n = Math.min(110, Math.floor(innerWidth * innerHeight / 16000))
+  parts = Array.from({ length: n }, () => ({
+    x: Math.random() * pcv.width, y: Math.random() * pcv.height,
+    vx: (Math.random() - .5) * .32 * devicePixelRatio, vy: (Math.random() - .5) * .32 * devicePixelRatio,
+    r: (Math.random() * 1.4 + .6) * devicePixelRatio,
+  }))
+}
+addEventListener('resize', pResize); pResize()
+addEventListener('mousemove', e => { pm = { x: e.clientX * devicePixelRatio, y: e.clientY * devicePixelRatio } })
+function pTick() {
+  if (pRun && document.getElementById('l-particles').classList.contains('active')) {
+    const cs = getComputedStyle(document.documentElement)
+    const line = (c, a) => c.replace('rgb(', 'rgba(').replace(')', ` / ${a})`)
+    const primary = cs.getPropertyValue('--c-primary').trim()
+    pctx.clearRect(0, 0, pcv.width, pcv.height)
+    for (const p of parts) {
+      p.x += p.vx; p.y += p.vy
+      if (p.x < 0 || p.x > pcv.width) p.vx *= -1
+      if (p.y < 0 || p.y > pcv.height) p.vy *= -1
+      const dx = p.x - pm.x, dy = p.y - pm.y, d = Math.hypot(dx, dy)
+      if (d < 130 * devicePixelRatio) { p.x += dx / d * .6; p.y += dy / d * .6 }
+      pctx.beginPath(); pctx.arc(p.x, p.y, p.r, 0, 7)
+      pctx.fillStyle = primary; pctx.globalAlpha = .8; pctx.fill()
+    }
+    pctx.globalAlpha = 1
+    for (let i = 0; i < parts.length; i++) for (let j = i + 1; j < parts.length; j++) {
+      const a = parts[i], b = parts[j], d = Math.hypot(a.x - b.x, a.y - b.y)
+      if (d < 110 * devicePixelRatio) {
+        pctx.strokeStyle = primary; pctx.globalAlpha = (1 - d / (110 * devicePixelRatio)) * .22
+        pctx.beginPath(); pctx.moveTo(a.x, a.y); pctx.lineTo(b.x, b.y); pctx.stroke()
+      }
+    }
+    pctx.globalAlpha = 1
+  }
+  requestAnimationFrame(pTick)
+}
+pTick()
+
+/* ── ③ 星空流星 ── */
+const scv = $('#cv-stars'), sctx = scv.getContext('2d')
+let stars = [], meteors = []
+function sResize() {
+  scv.width = innerWidth * devicePixelRatio; scv.height = innerHeight * devicePixelRatio
+  stars = Array.from({ length: 130 }, () => ({
+    x: Math.random() * scv.width, y: Math.random() * scv.height,
+    r: Math.random() * 1.3 * devicePixelRatio, ph: Math.random() * 6.28, sp: .4 + Math.random() * .8,
+  }))
+}
+addEventListener('resize', sResize); sResize()
+function sTick(t) {
+  if (document.getElementById('l-stars').classList.contains('active')) {
+    const primary = getComputedStyle(document.documentElement).getPropertyValue('--c-primary').trim()
+    sctx.clearRect(0, 0, scv.width, scv.height)
+    for (const s of stars) {
+      sctx.globalAlpha = .25 + .55 * Math.abs(Math.sin(s.ph + t / 1000 * s.sp))
+      sctx.fillStyle = '#fff'; sctx.beginPath(); sctx.arc(s.x, s.y, s.r, 0, 7); sctx.fill()
+    }
+    if (Math.random() < .006 && meteors.length < 2) meteors.push({
+      x: Math.random() * scv.width * .8 + scv.width * .2, y: Math.random() * scv.height * .3,
+      vx: -7 * devicePixelRatio, vy: 4.4 * devicePixelRatio, life: 1,
+    })
+    for (const m of meteors) {
+      m.x += m.vx; m.y += m.vy; m.life -= .016
+      const g = sctx.createLinearGradient(m.x, m.y, m.x - m.vx * 14, m.y - m.vy * 14)
+      g.addColorStop(0, primary); g.addColorStop(1, 'transparent')
+      sctx.globalAlpha = Math.max(0, m.life); sctx.strokeStyle = g; sctx.lineWidth = 1.6 * devicePixelRatio
+      sctx.beginPath(); sctx.moveTo(m.x, m.y); sctx.lineTo(m.x - m.vx * 14, m.y - m.vy * 14); sctx.stroke()
+    }
+    meteors = meteors.filter(m => m.life > 0); sctx.globalAlpha = 1
+  }
+  requestAnimationFrame(sTick)
+}
+requestAnimationFrame(sTick)
+
+/* ── ⑥ 鼠标柔光 ── */
+addEventListener('mousemove', e => {
+  const g = $('#cg'); g.style.left = e.clientX + 'px'; g.style.top = e.clientY + 'px'
+})
+document.addEventListener('visibilitychange', () => { pRun = !document.hidden })
+</script>
+</body>
+</html>

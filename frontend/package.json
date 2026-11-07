@@ -1,0 +1,52 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "gen:avatars": "node scripts/gen-avatars.mjs",
+    "build:ssg": "vite-ssg build",
+    "export:static": "node scripts/export-static-data.mjs",
+    "build:static": "node scripts/build-static.mjs",
+    "build:static:ci": "node scripts/build-static.mjs --no-export",
+    "preview:static": "node scripts/preview-static.mjs"
+  },
+  "dependencies": {
+    "@vscode/markdown-it-katex": "^1.1.2",
+    "@vueuse/core": "^15.0.0",
+    "animejs": "^4.5.0",
+    "axios": "^1.20.0",
+    "dayjs": "^1.11.23",
+    "jszip": "^3.10.2",
+    "katex": "^0.19.0",
+    "markdown-it": "^15.0.2",
+    "markdown-it-mark": "^4.0.0",
+    "markdown-it-sub": "^2.0.0",
+    "markdown-it-sup": "^2.0.0",
+    "naive-ui": "^2.45.3",
+    "pinia": "^4.0.3",
+    "shiki": "^4.4.3",
+    "vue": "^3.5.42",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@dicebear/core": "^9.4.3",
+    "@dicebear/open-peeps": "^9.4.2",
+    "@google/model-viewer": "^4.3.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/markdown-it": "^14.2.0",
+    "@types/node": "^24.13.3",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/tsconfig": "^0.9.1",
+    "echarts": "^6.1.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vite-ssg": "^28.3.0",
+    "vue-echarts": "^8.3.0",
+    "vue-tsc": "^3.3.11"
+  }
+}

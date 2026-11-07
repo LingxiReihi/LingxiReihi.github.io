@@ -1,0 +1,95 @@
+/* 设计 token —— docs/frontend-design.md §3.1（靛蓝科技，深默认 + 可切亮）
+   主题方向：仪器面板 Instrument —— 细网格底、直角边框、等宽 HUD 标签 */
+:root {
+  --c-bg: #0b1220;
+  --c-surface: #0f1826;
+  --c-elevated: #16223a;
+  --c-glass: rgba(17, 26, 46, 0.55);
+  --c-text: #e6edf3;
+  --c-text-2: #9fb0c3;
+  --c-text-3: #5f7185;
+  --c-border: #1f2c47;
+  --c-grid: rgba(57, 197, 187, 0.055);
+  --c-primary: #39c5bb;
+  --c-primary-2: #5ee0d6;
+  --c-glow: rgb(57 197 187 / 0.18);
+  --c-danger: #f87171;
+  --c-success: #4ade80;
+  --c-warning: #fbbf24;
+  --font-hud: ui-monospace, 'JetBrains Mono', 'Cascadia Mono', Consolas, 'Noto Sans Mono CJK SC', monospace;
+  color-scheme: dark;
+}
+
+.light {
+  --c-bg: #f8fafc;
+  --c-surface: #ffffff;
+  --c-elevated: #f1f5f9;
+  --c-glass: rgb(255 255 255 / 0.7);
+  --c-text: #0f172a;
+  --c-text-2: #475569;
+  --c-text-3: #94a3b8;
+  --c-border: #e2e8f0;
+  --c-grid: rgba(13, 148, 136, 0.06);
+  --c-primary: #0d9488;
+  --c-primary-2: #14b8a6;
+  --c-glow: rgb(13 148 136 / 0.12);
+  --c-danger: #b91c1c;
+  --c-success: #15803d;
+  --c-warning: #b45309;
+  color-scheme: light;
+}
+
+/* 基础元素样式必须置于 @layer base：未分层的 CSS 会永远压过 Tailwind 工具类，
+   否则 a{text-brand} 场景下 text-black 等类全部失效（按钮文字隐形）。 */
+@layer base {
+  body {
+    margin: 0;
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: system-ui, 'HarmonyOS Sans SC', 'Noto Sans SC', -apple-system, 'PingFang SC', sans-serif;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--c-glow);
+  }
+}
+
+/* Tailwind v4：把 token 暴露为工具类（bg-bg / text-text-2 / border-line 等） */
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-elevated: var(--c-elevated);
+  --color-glass: var(--c-glass);
+  --color-line: var(--c-border);
+  --color-ink: var(--c-text);
+  --color-ink-2: var(--c-text-2);
+  --color-ink-3: var(--c-text-3);
+  --color-brand: var(--c-primary);
+  --color-brand-2: var(--c-primary-2);
+  --color-danger: var(--c-danger);
+  --color-success: var(--c-success);
+  --color-warning: var(--c-warning);
+  --font-mono: var(--font-hud);
+}
+
+/* ── 仪器面板（HUD）通用件 ── */
+@utility hud-label {
+  font-family: var(--font-hud);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* 页面底纹：88px 细网格，只压一层极淡的主色 */
+@utility hud-grid {
+  background-image:
+    linear-gradient(var(--c-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-grid) 1px, transparent 1px);
+  background-size: 88px 88px;
+}

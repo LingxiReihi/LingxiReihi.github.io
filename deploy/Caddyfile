@@ -1,0 +1,93 @@
+# 自动 HTTPS：Caddy 内置 Let's Encrypt——签发、到期前 30 天自动续期、80 自动跳 443，无需额外 cron。
+# 规范主机 = https://www.lingxi-reihi.cn；裸域走 TLS 后 301 到 www；IP 仅 HTTP 301（签不了证书）。
+# 前提：80/443 公网可达 + 域名 A 记录指向本机（均已验证）。
+
+# HTTP/3(QUIC)：弱网/移动网络下多路复用不队头阻塞，静态资源加载更快。
+# 需 UDP 443 可达（阿里云安全组若未放行 UDP，浏览器自动回落 H2，无副作用）。
+{
+	servers {
+		protocols h1 h2 h3
+	}
+}
+
+lingxi-reihi.cn {
+	redir https://www.lingxi-reihi.cn{uri} permanent
+}
+
+http://47.82.123.169 {
+	redir https://www.lingxi-reihi.cn{uri} permanent
+}
+
+www.lingxi-reihi.cn {
+	encode zstd gzip
+
+	# 后端直出 + SEO 端点（具名 matcher 展开写法：单行内联块 Caddyfile 不支持）
+	@api path /api/*
+	@media path /media/*
+	@sitemap_xml path /sitemap.xml
+	@sitemap_txt path /sitemap.txt
+	@robots path /robots.txt
+	@feed path /feed.xml
+	@baidu path /baidu_verify_*
+
+	handle @api {
+		reverse_proxy backend:8000
+	}
+	handle @media {
+		reverse_proxy backend:8000
+	}
+	handle @sitemap_xml {
+		reverse_proxy backend:8000
+	}
+	handle @sitemap_txt {
+		reverse_proxy backend:8000
+	}
+	handle @robots {
+		reverse_proxy backend:8000
+	}
+	handle @feed {
+		rewrite * /api/v1/rss
+		reverse_proxy backend:8000
+	}
+	handle @baidu {
+		reverse_proxy backend:8000
+	}
+
+	# 预渲染静态站（ADR-0001：vite-ssg flat dirStyle → blog/xxx.html）
+	# /srv/site = 宿主 frontend 目录整体挂载；dist 为重建脚本原子切换的符号链接
+	handle {
+		root * /srv/site/dist
+		try_files {path} {path}.html {path}/index.html {path} /index.html
+		file_server
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+		# 非 /assets 静态响应（HTML 页面、favicon 等，体积都小）一律不缓存：
+		# try_files 把 /blog/xxx 改写成 xxx.html 后 path 匹配器已不可用，caddy:2-alpine 亦无 server_response 匹配器，
+		# 故反向排除 /assets/*（哈希产物保持 immutable）
+		@noassets not path /assets/*
+		header @noassets Cache-Control "no-store"
+		# 安全响应头
+		header X-Content-Type-Options "nosniff"
+		header X-Frame-Options "DENY"
+		header Referrer-Policy "strict-origin-when-cross-origin"
+	}
+}
+
+mail.lingxi-reihi.cn {
+	encode zstd gzip
+	reverse_proxy mail:8000
+}
+
+# Lexi 单词记背站：后端同时直出前端静态产物，只需一条反代
+learn.lingxi-reihi.cn {
+	encode zstd gzip
+
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+
+	header X-Content-Type-Options "nosniff"
+	header X-Frame-Options "SAMEORIGIN"
+	header Referrer-Policy "strict-origin-when-cross-origin"
+
+	reverse_proxy lexi-api:8010
+}

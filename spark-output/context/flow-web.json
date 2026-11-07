@@ -1,0 +1,95 @@
+{
+  "skill": "flow-web",
+  "project_name": "personal-web",
+  "scenario": "复合场景：Community & Social + Marketing Site + SaaS Management（个人博客站 + 单人管理后台）",
+  "component_library": "Naive UI（后台）+ Tailwind CSS（前台）— Vue 适配路径（技能默认 React 路径按用户技术栈替换）",
+  "tech_stack": {
+    "frontend": "Vue 3.5 + Vite + TypeScript + vue-router 4 + Pinia + Naive UI + Tailwind CSS 4 + markdown-it/Shiki + model-viewer + ECharts",
+    "backend": "Python 3.12 + FastAPI + SQLAlchemy 2.0 async + SQLite(WAL)/Alembic + JWT(access+refresh) + Pillow",
+    "deployment": "Docker + Caddy（SPA 静态托管 + /api /media 反代）"
+  },
+  "flows": [
+    {
+      "name": "A 首页/落地",
+      "screens": [
+        "Hero",
+        "精选内容区",
+        "页脚/退出"
+      ]
+    },
+    {
+      "name": "B 博客浏览",
+      "screens": [
+        "列表",
+        "筛选态",
+        "文章详情",
+        "阅读延伸"
+      ]
+    },
+    {
+      "name": "C 模型页(Blender3D/渲染/动画)",
+      "screens": [
+        "Gallery",
+        "详情媒体区",
+        "全屏灯箱"
+      ]
+    },
+    {
+      "name": "D 杂谈+个人主页",
+      "screens": [
+        "杂谈时间线",
+        "杂谈详情",
+        "About",
+        "联系出口"
+      ]
+    },
+    {
+      "name": "E 后台登录",
+      "screens": [
+        "登录页",
+        "错误/锁定态",
+        "成功着陆"
+      ]
+    },
+    {
+      "name": "F 内容上传编辑",
+      "screens": [
+        "内容列表",
+        "MD编辑器",
+        "素材库",
+        "发布确认",
+        "更新后列表"
+      ]
+    },
+    {
+      "name": "G 站点内容设置",
+      "screens": [
+        "设置中心",
+        "个人资料编辑",
+        "首页/导航配置"
+      ]
+    },
+    {
+      "name": "H 监控看板",
+      "screens": [
+        "总览",
+        "下钻/筛选",
+        "数据出口"
+      ]
+    }
+  ],
+  "screens": [
+    {
+      "flow": "A-H",
+      "file_path": "docs/frontend-design.md",
+      "type": "design-doc"
+    }
+  ],
+  "deliverables": [
+    "docs/frontend-design.md",
+    "docs/backend-architecture.md",
+    "docs/api-reference.md"
+  ],
+  "code_generation": "done — M1a–M7 全栈实现完成（28 pytest + vue-tsc + SSG 构建 + 浏览器走查），见 git log",
+  "generated_at": "2026-09-22"
+}

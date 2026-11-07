@@ -1,0 +1,76 @@
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../deploy/Dockerfile.api
+    env_file: ../backend/.env
+    volumes:
+      - ../backend/data:/app/data
+    restart: unless-stopped
+    mem_limit: 256m
+    # 仅暴露给 caddy + 宿主机重建脚本（127.0.0.1，不对公网）
+    ports:
+      - "127.0.0.1:8000:8000"
+    expose:
+      - "8000"
+    # 后端也用 personal-mail 发信，接上 lexi_net 后两条网络都能解析 mail
+    networks:
+      - default
+      - lexi_net
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+      # HTTP/3(QUIC) 走 UDP，缺这一行 Caddy 不会监听 UDP 443
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # 挂整个 frontend 目录而非 dist：dist 是 rebuild 脚本原子替换的符号链接，
+      # 挂 dist 会在容器创建时解析定死，切换新版本后 caddy 仍服务旧目录
+      - ../frontend:/srv/site:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+    restart: unless-stopped
+    mem_limit: 256m
+    networks:
+      - default
+      - lexi_net
+
+  # 路线 2：前端构建也进 Docker（宿主机无需装 Node）。
+  # 一次性服务，平时不启动，靠 profiles 隔离：
+  #   SITE_ORIGIN=https://域名 docker compose --profile build run --rm builder \
+  #     bash /repo/scripts/rebuild-frontend.sh
+  # 挂载整个仓库到 /repo（releases/ 与 dist 符号链接落回宿主 ../frontend，caddy 即时可见）；
+  # node_modules 用命名卷持久化，避免污染宿主且下次跳过 npm ci。
+  builder:
+    image: node:22-bookworm-slim
+    profiles: ["build"]
+    working_dir: /repo/frontend
+    volumes:
+      - ..:/repo
+      - node_modules:/repo/frontend/node_modules
+      # npm 缓存必须持久化：builder 每次都是新建容器，冷缓存要从 registry 重下 292 个包。
+      # 依赖变更时一次构建会超过 watcher 的 */5 间隔 → cron 自己叠自己，多个 npm ci 共用
+      # node_modules 卷互相删树，2026-10-19 实发（单包下载被拖到 380–635 秒后 ETIMEDOUT）。
+      # 挂上缓存后同一件事实测 10 秒。
+      - npm_cache:/root/.npm
+    environment:
+      APP_DIR: /repo
+      SSG_API_BASE: http://backend:8000/api/v1   # 走 compose 内网直连后端，无需暴露端口
+      SITE_ORIGIN: ${SITE_ORIGIN:?SITE_ORIGIN 未设置（如 https://your-domain）}
+    depends_on:
+      - backend
+
+volumes:
+  caddy_data:
+  caddy_config:
+  node_modules:
+  npm_cache:
+
+networks:
+  lexi_net:
+    external: true

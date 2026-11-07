@@ -1,0 +1,99 @@
+{
+  "skill": "brief",
+  "generated_at": "2026-09-21T16:46:54.872Z",
+  "project_name": "personal-web",
+  "project_type": "产品设计",
+  "project_subtype": "全新产品",
+  "business_context": "个人站全新建设：前台五栏目+管理后台，Vue 3 + FastAPI 已锁定。部署于香港服务器，须符合百度推送与收录规则，vite-ssg 预渲染与本机重建流水线是关键约束。",
+  "business_goal": [
+    "百度收录可见、推送全通",
+    "发布→前台可见≤10分钟",
+    "作者全自助运营，零代码改动",
+    "看板可答「谁来了、看了什么」"
+  ],
+  "user": [
+    "中文技术/艺术访客，搜索为主入口",
+    "作者本人，日常后台运营",
+    "潜在合作方/HR，来看作品与经历",
+    "移动端浏览为主"
+  ],
+  "strategy_dimensions": [
+    {
+      "dimension": "信息架构 IA",
+      "thesis": "五栏目扁平导航，首页只做导流",
+      "tactics": [
+        "一级导航不二级展开",
+        "三类内容统一模型",
+        "相关推荐标签驱动"
+      ],
+      "rationale": "对应导流目标；访客路径最短"
+    },
+    {
+      "dimension": "交互设计",
+      "thesis": "发布即流水线，前台浏览零摩擦",
+      "tactics": [
+        "编辑器30s自动存稿",
+        "发布→重建→推送回显",
+        "筛选条件URL同步"
+      ],
+      "rationale": "对应随时上传、随时修改"
+    },
+    {
+      "dimension": "视觉设计",
+      "thesis": "靛蓝底+#39C5BB唯一强调色",
+      "tactics": [
+        "玻璃拟态仅Hero重点卡",
+        "阅读区纯平无装饰层",
+        "深色默认可切亮"
+      ],
+      "rationale": "主题B定稿；AA对比兜底"
+    },
+    {
+      "dimension": "内容设计",
+      "thesis": "轻松随性语调，短内容优先",
+      "tactics": [
+        "杂谈卡片300字折叠",
+        "摘要80字兼作SEO",
+        "About仅社交链接"
+      ],
+      "rationale": "tone已定；兼顾爬虫可读"
+    },
+    {
+      "dimension": "多端适配",
+      "thesis": "移动优先阅读，4断点",
+      "tactics": [
+        "<640单列+Drawer导航",
+        "TOC折叠浮动按钮",
+        "后台表格转卡片行"
+      ],
+      "rationale": "百度移动适配+访客移动为主"
+    }
+  ],
+  "design_criteria": {
+    "quantitative": [
+      "正文预渲染HTML收录通过",
+      "首页LCP<2.5s",
+      "发布→前台可见≤10min"
+    ],
+    "qualitative": [
+      "阅读区无装饰干扰，深色对比达AA"
+    ]
+  },
+  "constraints": [
+    "Vue3+FastAPI+SQLite已锁定",
+    "香港无备案，收录权重折损",
+    "重建要求Node>=20/内存>=1GB",
+    "百度token暂缓（配置后补推）",
+    "单管理员，无注册体系"
+  ],
+  "out_of_scope": [
+    "评论/留言/点赞不做",
+    "多作者角色与付费功能不做",
+    "英文i18n不做",
+    "推荐算法不做（标签匹配即可）",
+    "对象存储/CDN不进v1"
+  ],
+  "style": "script",
+  "ratio": "16-9",
+  "scale": "md"
+}

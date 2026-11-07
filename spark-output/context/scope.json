@@ -1,0 +1,226 @@
+{
+  "skill": "scope",
+  "generated_at": "2026-09-22T12:00:00+08:00",
+  "project_name": "personal-web",
+  "prd_source": {
+    "type": "paste",
+    "reference": "用户 2026-09-22 指令 + docs/frontend-design.md + docs/backend-architecture.md + docs/api-reference.md"
+  },
+  "product_summary": "单人维护的个人博客站：前台五栏目（落地主页/博客/模型[3D+渲染图+动画]/杂谈/个人主页）展示作者技术与艺术作品，后台支撑随时上传内容、修改站点、监控访问；视觉为靛蓝科技深色主题，强调色 #39C5BB；部署后须符合百度推送/收录规则。",
+  "goals": {
+    "business": [
+      "站点可被百度正确收录与推送，中文搜索可发现（新增硬目标）",
+      "作者可脱离代码、随时通过后台自主发布与修改全部内容"
+    ],
+    "product": [
+      "访客从落地页顺畅导流至博客/模型/杂谈/关于各栏目",
+      "3D 模型/渲染图/动画三类媒体在 Web 端高质量呈现",
+      "后台管理路径最短：上传→发布→前台即时可见；监控看板可回答「本周谁来了、看了什么」"
+    ]
+  },
+  "target_users": [
+    "作者本人（唯一管理员，高频后台操作）",
+    "中文技术/艺术内容访客（未登录，搜索引擎与社交分享为主要来源）",
+    "潜在合作方/HR（经个人主页建立联系）"
+  ],
+  "features": [
+    {
+      "name": "落地主页",
+      "description": "个人品牌 Hero + 精选内容导流（Flow A）",
+      "priority": "p0",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "博客",
+      "description": "列表/筛选/MD 详情/延伸（Flow B）",
+      "priority": "p0",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "模型页",
+      "description": "3D 模型、渲染图、动画三类展示（Flow C）",
+      "priority": "p0",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "杂谈页",
+      "description": "短内容时间线（Flow D-1/2）",
+      "priority": "p1",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "个人主页",
+      "description": "About + 联系出口（Flow D-3/4）",
+      "priority": "p1",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "后台内容上传",
+      "description": "三类内容 CRUD + 素材库 + 发布流（Flow E/F）",
+      "priority": "p0",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "后台站点设置",
+      "description": "资料/首页/导航等内容可修改（Flow G）",
+      "priority": "p0",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "后台监控看板",
+      "description": "PV/UV/热门内容/来源（Flow H）",
+      "priority": "p1",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "靛蓝科技主题 + #39C5BB",
+      "description": "深色为主、渐变点缀的科技感视觉，主强调色替换为 #39C5BB",
+      "priority": "p0",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "百度推送合规",
+      "description": "sitemap.txt/xml + 主动推送 API + 可被抓取的 HTML 正文",
+      "priority": "p0",
+      "explicit_in_prd": true
+    },
+    {
+      "name": "发布后自动推送百度",
+      "description": "后台 publish 动作联动百度 API 推送",
+      "priority": "p1",
+      "explicit_in_prd": false
+    },
+    {
+      "name": "SEO 渲染架构改造",
+      "description": "vite-ssg/SSR 使正文进首屏 HTML（推翻原 SPA+运行期渲染决策）",
+      "priority": "p0",
+      "explicit_in_prd": false
+    }
+  ],
+  "constraints": [
+    "技术栈锁定：Vue 3 + Vite + TS + Naive UI(后台) + Tailwind(前台)；Python FastAPI + SQLite 起步",
+    "主题方向锁定：B 靛蓝科技，主色 #39C5BB（用户显式指定）",
+    "部署后须符合百度推送规则 → 页面内容必须服务端可见（HTML 含正文），HTTPS，移动适配，sitemap",
+    "单管理员个人站，无多用户/注册体系",
+    "既有交付物：三份设计文档（docs/）需随本轮决策同步修订"
+  ],
+  "out_of_scope": [
+    "评论系统（配置开关，默认关闭）",
+    "多作者/角色权限",
+    "付费/订阅功能",
+    "英文 i18n"
+  ],
+  "design_implications": [
+    "token 层重构：深色底(#0a0f14 系) + #39C5BB 单一强调色的对比度校验（暗底上 #39C5BB 约 8:1 可达 AA，但渐变/半透明叠加处需逐屏核）；玻璃拟态卡片仅用于重点区块，避免全站滥用导致阅读疲劳",
+    "「符合百度推送」不是加个接口而是推翻渲染架构：正文 MD 前端运行期渲染的 SPA 百度几乎读不到 → 需 vite-ssg 构建期预渲染（个人站推荐，无需常驻 Node）或后端直出 HTML，博客/模型/杂谈详情为必预渲染路由",
+    "URL 语义化约束升级：slug 必须拼音/英文语义化且发布后不可变（收录稳定性），sitemap 需含 lastmod，增量推送依赖发布事件",
+    "后台 Flow F 增加一步「发布→推送百度」反馈闭环：publish 成功 Toast 内附推送状态（成功/失败可重试），失败不影响发布本身",
+    "3D/动画内容对爬虫不透明：模型详情页必须服务端输出文字描述+渲染图+结构化参数（可被搜索引擎理解），媒体作渐进增强"
+  ],
+  "gaps": [
+    {
+      "field": "baidu_token_integration",
+      "why_needed": "主动推送需资源平台接口地址+token（env）",
+      "suggested_next_step": "ziyuan.baidu.com 快速接入页获取；不阻塞开发",
+      "status": "deferred-by-user",
+      "note": "配置后经 SEO 面板补推，不阻塞任何开发"
+    },
+    {
+      "field": "design_criteria",
+      "why_needed": "体验完成标准（收录可见性/LCP/对比度已给下限，缺验收级定义）",
+      "suggested_next_step": "进入 Brief 定义"
+    },
+    {
+      "field": "tone",
+      "why_needed": "杂谈/关于文案语调",
+      "suggested_next_step": "Brief 阶段补"
+    },
+    {
+      "field": "persona_jtbd",
+      "why_needed": "访客人物锚点",
+      "suggested_next_step": "个人站轻量自答即可"
+    }
+  ],
+  "clarifications": {
+    "rendering_architecture": "vite-ssg 构建期预渲染（已确认）",
+    "infra": "已有域名 + 香港服务器（无 ICP，文档已注明百度权重风险）",
+    "theme": "B 靛蓝科技：深色默认+可切亮色，#39C5BB 主强调色（已确认）",
+    "about_contact": "仅社交链接，无明文邮箱/留言表单（已确认）",
+    "push_method": "用户未答 → 默认双通道：发布自动推送 + 后台手动重推（docs v1.1 已按此设计，待用户否决）"
+  },
+  "updated_at": "2026-09-21T16:39:49.692Z",
+  "version": "1.3-final",
+  "requirement_confirmation": {
+    "status": "confirmed",
+    "date": "2026-09-22",
+    "coverage": [
+      {
+        "req": "前端 Vue",
+        "landed": "docs/frontend-design.md §2（Vue3+Vite+TS+Pinia）",
+        "ok": true
+      },
+      {
+        "req": "后端 Python+FastAPI",
+        "landed": "docs/backend-architecture.md §2-3",
+        "ok": true
+      },
+      {
+        "req": "落地主页",
+        "landed": "Flow A（frontend §5）+ GET /home",
+        "ok": true
+      },
+      {
+        "req": "博客页面",
+        "landed": "Flow B + /posts 端点组",
+        "ok": true
+      },
+      {
+        "req": "模型页（3D模型/渲染图/动画）",
+        "landed": "Flow C，media_kind 三类 + /models 端点 + model-viewer/Lightbox/Video",
+        "ok": true
+      },
+      {
+        "req": "杂谈页面",
+        "landed": "Flow D-1/2 + /chats 游标端点",
+        "ok": true
+      },
+      {
+        "req": "个人主页",
+        "landed": "Flow D-3/4 + /about + settings.profile；仅社交链接",
+        "ok": true
+      },
+      {
+        "req": "后台上传数据",
+        "landed": "Flow F（CRUD/素材库/发布/自动草稿）+ admin 端点组",
+        "ok": true
+      },
+      {
+        "req": "后台修改网站内容",
+        "landed": "Flow G 五分区分组 settings + PUT 端点",
+        "ok": true
+      },
+      {
+        "req": "后台监控网页动态",
+        "landed": "Flow H stats 端点组 + 中间件采集 + SEO 健康卡",
+        "ok": true
+      },
+      {
+        "req": "主题B靛蓝科技+主色#39C5BB+深默认可切亮",
+        "landed": "frontend §2.1/§3.1 token 定稿",
+        "ok": true
+      },
+      {
+        "req": "符合百度推送规则",
+        "landed": "frontend §10（vite-ssg 预渲染+SEO 页面规范）+ backend §10（推送/sitemap/流水线）+ api §5.6",
+        "ok": true
+      }
+    ],
+    "open_items": [
+      "（已全部关闭）"
+    ]
+  },
+  "final_decisions": {
+    "baidu_token": "用户决策：暂不配置。流水线只重建不推送，SEO_PUSH_ENABLED 缺省 false；配置后 SEO 面板批量补推（pending_push）",
+    "rebuild": "用户决策：服务器本机脚本重建（后端 subprocess + 文件锁 + 10s 合并窗口 + dist 符号链接原子切换）；连带要求：同机 Node>=20、内存>=1GB；rebuild-callback 端点取消"
+  }
+}

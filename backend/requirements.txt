@@ -1,0 +1,18 @@
+# runtime
+fastapi>=0.141
+uvicorn[standard]
+sqlalchemy[asyncio]>=2.0
+aiosqlite
+alembic
+pydantic-settings
+PyJWT
+bcrypt
+cryptography>=45    # 站点设置里的邮件 API Key 静态加密（Fernet，主密钥由 JWT_SECRET 派生）
+python-multipart
+httpx
+pillow
+markdown-it-py>=3.0    # 公告/评论通知按 Markdown 渲染成邮件 HTML
+
+# dev / test
+pytest>=8
+pytest-asyncio

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>personal-web · 作者运营旅程 — User Journey Map</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+    body { padding: 32px; background: #FAFAF7; color: #1F2937; }
+    .header { margin-bottom: 24px; }
+    .title { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; color: #6B7280; }
+    .persona-card { display: inline-flex; align-items: center; padding: 12px 20px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin: 16px 0 32px; }
+    .persona-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #6366F1, #EC4899); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
+    .persona-info { font-size: 13px; }
+    .persona-info b { display: block; font-size: 15px; color: #111827; }
+    .persona-info span { color: #6B7280; }
+    .jtbd { font-style: italic; padding: 12px 16px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 4px; margin-bottom: 32px; font-size: 14px; }
+    .journey-grid { display: grid; grid-template-columns: 120px repeat({{stage_count}}, 1fr); gap: 1px; background: #E5E7EB; border-radius: 12px; overflow: hidden; }
+    .grid-row { display: contents; }
+    .row-label, .stage-cell { background: white; padding: 14px 12px; font-size: 12px; }
+    .row-label { background: #F3F4F6; font-weight: 600; color: #4B5563; display: flex; align-items: center; }
+    .stage-header { background: #1F2937; color: white; padding: 16px 12px; font-size: 13px; font-weight: 600; text-align: center; }
+    .stage-header .emoji { font-size: 24px; display: block; margin-bottom: 4px; }
+    .stage-cell ul { list-style: none; }
+    .stage-cell li { padding: 4px 0; line-height: 1.4; }
+    .stage-cell li:before { content: "·"; color: #9CA3AF; margin-right: 6px; }
+    .emotion-cell { font-size: 28px; text-align: center; padding: 16px; }
+    .pain-bar { height: 4px; background: linear-gradient(to right, #10B981, #F59E0B, #EF4444); border-radius: 2px; margin-top: 8px; }
+    .pain-indicator { height: 8px; margin-top: 4px; display: flex; gap: 2px; }
+    .pain-indicator span { flex: 1; height: 100%; background: #E5E7EB; border-radius: 1px; }
+    .pain-indicator span.active { background: currentColor; }
+    .key-moment-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-top: 4px; }
+    .key-moment-badge.truth { background: #EFF6FF; color: #2563EB; }
+    .key-moment-badge.dropout { background: #FEE2E2; color: #DC2626; }
+    .key-moment-badge.delight { background: #D1FAE5; color: #059669; }
+    .key-moment-badge.recovery { background: #FEF3C7; color: #D97706; }
+    .opportunity { background: #ECFDF5; padding: 6px 8px; border-radius: 4px; font-size: 11px; color: #047857; margin: 3px 0; }
+    .quote { font-style: italic; color: #4B5563; padding: 6px 8px; background: #F9FAFB; border-left: 3px solid #D1D5DB; font-size: 11px; margin: 3px 0; }
+    .curve-section { margin-top: 32px; padding: 24px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .curve-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+    .curve-svg { width: 100%; height: 120px; }
+    .footer { margin-top: 24px; text-align: center; color: #9CA3AF; font-size: 11px; }
+    @media print { body { padding: 16px; } .journey-grid { page-break-inside: avoid; } }
+    .toolbar { position: fixed; top: 16px; right: 16px; display: flex; gap: 8px; }
+    .toolbar button { padding: 8px 16px; background: #1F2937; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
+    .toolbar button:hover { background: #374151; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button onclick="window.print()">打印 / PDF</button>
+  </div>
+
+  <div class="header">
+    <div class="title">personal-web · 作者运营旅程 — User Journey Map</div>
+    <div class="subtitle">生成时间: 2026-09-22 · 数据源: brief.json + flow-web.json Flow E–H（假设性，待使用一周后回看） · <span class="key-moment-badge dropout">假设性旅程：未经用户研究验证</span></div>
+  </div>
+
+  <div class="persona-card">
+    <div class="persona-avatar">作</div>
+    <div class="persona-info">
+      <b>作者本人（唯一管理员）</b>
+      <span>技术 + Blender 创作双栖 · 要求随时上传/修改/看数据，零代码运营</span>
+    </div>
+  </div>
+
+  <div class="jtbd">当我有了分享内容或新作品的冲动时，我想在 10 分钟内完成写作、传图、发布并让百度知道，然后随时知道有没有人来看——中间不想碰任何工程操作。</div>
+
+  <div class="journey-grid" style="grid-template-columns: 120px repeat(6, 1fr);">
+    <div class="row-label"></div>
+    <div class="stage-header"><span class="emoji">✍️</span>起稿</div>
+    <div class="stage-header"><span class="emoji">🖼️</span>备素材</div>
+    <div class="stage-header"><span class="emoji">🧪</span>校对预览</div>
+    <div class="stage-header"><span class="emoji">🚀</span>发布推送</div>
+    <div class="stage-header"><span class="emoji">📊</span>看反馈</div>
+    <div class="stage-header"><span class="emoji">🔁</span>持续运营</div>
+    <div class="row-label">用户目标</div>
+    <div class="stage-cell">把想法立刻写下来</div>
+    <div class="stage-cell">把图/glb/视频传上并配好</div>
+    <div class="stage-cell">确认发布后的真实样子</div>
+    <div class="stage-cell">一键上线且被百度知道</div>
+    <div class="stage-cell">知道谁来了看了什么</div>
+    <div class="stage-cell">让站点保持新鲜</div>
+    <div class="row-label">用户行动</div>
+    <div class="stage-cell"><ul><li>开后台进编辑器</li><li>写 MD 正文</li><li>随手存草稿</li></ul></div>
+    <div class="stage-cell"><ul><li>拖拽上传</li><li>素材库复用</li><li>裁剪封面</li></ul></div>
+    <div class="stage-cell"><ul><li>开预览链接</li><li>查代码高亮/图片排布</li></ul></div>
+    <div class="stage-cell"><ul><li>点发布</li><li>看重建进度</li><li>确认推送状态</li></ul></div>
+    <div class="stage-cell"><ul><li>开看板</li><li>看热门内容下钻</li></ul></div>
+    <div class="stage-cell"><ul><li>换首页精选</li><li>调导航/简介</li></ul></div>
+    <div class="row-label">触点</div>
+    <div class="stage-cell"><ul><li>/admin/content 编辑器（分屏预览）</li></ul></div>
+    <div class="stage-cell"><ul><li>素材库 Modal（F3）</li><li>媒体上传进度条</li></ul></div>
+    <div class="stage-cell"><ul><li>preview-token 草稿页</li></ul></div>
+    <div class="stage-cell"><ul><li>状态机 PATCH</li><li>本机 rebuild 队列</li><li>SEO 面板</li></ul></div>
+    <div class="stage-cell"><ul><li>Dashboard KPI/趋势</li><li>来源分布</li></ul></div>
+    <div class="stage-cell"><ul><li>设置中心五分区</li><li>首页配置开关</li></ul></div>
+    <div class="row-label">用户心声</div>
+    <div class="stage-cell"><ul><li>"先记下来，细节回头补"</li></ul></div>
+    <div class="stage-cell"><ul><li>"这个大文件怎么还没传完"</li><li>"上次渲的图能复用吗"</li></ul></div>
+    <div class="stage-cell"><ul><li>"预览和真实页一致吗"</li><li>"摘要够勾人吗"</li></ul></div>
+    <div class="stage-cell"><ul><li>"构建要等多久"</li><li>"token 还没配，推送是不是没走"</li></ul></div>
+    <div class="stage-cell"><ul><li>"这篇写得值不值，看 PV 说话"</li></ul></div>
+    <div class="stage-cell"><ul><li>"改个简介还要发代码？不应该"</li></ul></div>
+    <div class="row-label">情绪</div>
+    <div class="stage-cell emotion-cell">😊<div class="pain-indicator" style="color:#10B981"><span class="active"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div><span class="key-moment-badge delight" title="灵感即刻成稿，自动存稿无负担">满意峰值</span></div>
+    <div class="stage-cell emotion-cell">😐<div class="pain-indicator" style="color:#34D399"><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span><span class=""></span></div></div>
+    <div class="stage-cell emotion-cell">😐<div class="pain-indicator" style="color:#34D399"><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span><span class=""></span></div></div>
+    <div class="stage-cell emotion-cell">😕<div class="pain-indicator" style="color:#F59E0B"><span class="active"></span><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span></div><span class="key-moment-badge truth" title="首次走通发布→重建→推送链路 = 平台信任建立点">关键时刻</span><span class="key-moment-badge dropout" title="等待/失败/token 未配置若反馈不清，作者会退回手工部署">流失风险</span></div>
+    <div class="stage-cell emotion-cell">🙂<div class="pain-indicator" style="color:#34D399"><span class="active"></span><span class="active"></span><span class=""></span><span class=""></span><span class=""></span></div></div>
+    <div class="stage-cell emotion-cell">😊<div class="pain-indicator" style="color:#10B981"><span class="active"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div></div>
+    <div class="row-label">痛点</div>
+    <div class="stage-cell"><ul><li>后台无响应/需重登会打断灵感</li></ul></div>
+    <div class="stage-cell"><ul><li>glb/视频大文件受服务器带宽影响</li><li>超限文件（>50MB）需回桌面端压缩</li></ul></div>
+    <div class="stage-cell"><ul><li>预渲染构建期才生成终稿，预览与产物存在理论差异</li></ul></div>
+    <div class="stage-cell"><ul><li>重建排队 ≤10min 等待焦虑</li><li>token 暂缓期 pending_push 需记得补推</li><li>构建失败仅日志可见</li></ul></div>
+    <div class="stage-cell"><ul><li>服务端采集 PV 近似，精度有限</li></ul></div>
+    <div class="stage-cell"><ul><li>分区改设置会触发全站重建的预期需建立</li></ul></div>
+    <div class="row-label">用户原话</div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="stage-cell"><div class="quote" style="opacity:.55">暂无用户原话 — 建议跑 /probe 补充验证</div></div>
+    <div class="row-label">设计机会</div>
+    <div class="stage-cell"><div class="opportunity">💡 30s 自动存草稿 + beforeunload 保护</div><div class="opportunity">💡 JWT refresh 无感续期</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 sha256 秒传去重</div><div class="opportunity">💡 上传前本地体积预检提示</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 预览复用同一渲染管线（同构 markdown-it）</div><div class="opportunity">💡 摘要 80 字实时计数</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 发布 Toast 全程回显 重建→推送 状态</div><div class="opportunity">💡 SEO 面板批量补推 + 待推角标</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 百度资源平台流量对账 + 站内统计双口径</div></div>
+    <div class="stage-cell"><div class="opportunity">💡 设置保存即自动重建（同流水线复用）</div></div>
+  </div>
+
+  <div class="curve-section">
+    <div class="curve-title">📈 情感曲线（Pain Level over Journey）</div>
+    <svg class="curve-svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <line x1="0" y1="20" x2="1200" y2="20" stroke="#E5E7EB" stroke-dasharray="2" />
+      <line x1="0" y1="60" x2="1200" y2="60" stroke="#E5E7EB" stroke-dasharray="2" />
+      <line x1="0" y1="100" x2="1200" y2="100" stroke="#E5E7EB" stroke-dasharray="2" />
+      <polyline points="0,10 240,35 480,35 720,60 960,35 1200,10" fill="none" stroke="#6366F1" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+      <circle cx="0" cy="10" r="6" fill="#10B981" stroke="white" stroke-width="2" />
+      <circle cx="240" cy="35" r="6" fill="#34D399" stroke="white" stroke-width="2" />
+      <circle cx="480" cy="35" r="6" fill="#34D399" stroke="white" stroke-width="2" />
+      <circle cx="720" cy="60" r="6" fill="#F59E0B" stroke="white" stroke-width="2" />
+      <circle cx="960" cy="35" r="6" fill="#34D399" stroke="white" stroke-width="2" />
+      <circle cx="1200" cy="10" r="6" fill="#10B981" stroke="white" stroke-width="2" />
+    </svg>
+  </div>
+
+  <div class="footer">
+    Generated by SparkSkillsHub Journey Skill · Persona: 作者本人（唯一管理员） · 6 stages
+  </div>
+</body>
+</html>

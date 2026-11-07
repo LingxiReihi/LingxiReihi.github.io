@@ -1,0 +1,245 @@
+{
+  "skill": "journey",
+  "generated_at": "2026-09-21T16:55:55.130Z",
+  "project_name": "personal-web",
+  "persona": {
+    "name": "访客（假设 persona，待 Probe 验证）",
+    "description": "中文技术/艺术内容访客 · 移动端为主 · 百度搜索为主要入口",
+    "jtbd": "当我要查找某个技术或艺术创作话题时，我想快速找到真人写的、写得清楚的内容并判断这位作者是否值得记住，而不把时间耗在加载慢、广告多、正文搜不到的站路上。"
+  },
+  "journey_type": "end-to-end",
+  "stages": [
+    {
+      "name": "发现",
+      "emoji": "👀",
+      "order": 1,
+      "user_goal": "搜索话题时看到本站结果",
+      "touchpoints": [
+        "百度搜索 SERP",
+        "RSS 聚合",
+        "ArtStation/B站 外链"
+      ],
+      "actions": [
+        "搜技术/作品关键词",
+        "扫 SERP 标题与摘要",
+        "点击进站"
+      ],
+      "thoughts": [
+        "这条结果是不是我要找的",
+        "这个站是谁做的"
+      ],
+      "emotion": "😐",
+      "pain_level": 2,
+      "quotes": [],
+      "pain_points": [
+        "HK 服务器国内访问慢",
+        "无备案站点百度权重折损",
+        "摘要不友好则点击率下降"
+      ],
+      "opportunities": [
+        "title/description SEO 规范 + JSON-LD",
+        "向资源平台提交 sitemap.txt"
+      ]
+    },
+    {
+      "name": "首次到访",
+      "emoji": "🚪",
+      "order": 2,
+      "user_goal": "10 秒判断值不值得留",
+      "touchpoints": [
+        "落地主页（预渲染首屏）",
+        "移动端首屏"
+      ],
+      "actions": [
+        "看 Hero 定位",
+        "扫精选区",
+        "决定去留"
+      ],
+      "thoughts": [
+        "加载超过 3 秒我就走"
+      ],
+      "emotion": "🙂",
+      "pain_level": 2,
+      "quotes": [],
+      "pain_points": [
+        "慢连接首屏 LCP 超标即流失",
+        "移动端导航入 Drawer 导流变弱"
+      ],
+      "opportunities": [
+        "vite-ssg 首屏直出 + 骨架屏",
+        "精选区三区块强导流"
+      ]
+    },
+    {
+      "name": "阅读消费",
+      "emoji": "📖",
+      "order": 3,
+      "user_goal": "读完文章/看清作品",
+      "touchpoints": [
+        "/blog/:slug",
+        "/models/:slug"
+      ],
+      "actions": [
+        "读长文/看 3D",
+        "翻代码块",
+        "旋转/灯箱操作"
+      ],
+      "thoughts": [
+        "有目录吗",
+        "手机上模型转得动吗"
+      ],
+      "emotion": "🙂",
+      "pain_level": 2,
+      "quotes": [],
+      "pain_points": [
+        "glb 弱网加载失败",
+        "低端机 WebGL 不兼容",
+        "深色代码块对比"
+      ],
+      "opportunities": [
+        "3D 失败降级渲染图",
+        "TOC 浮动按钮 + Shiki 双主题"
+      ]
+    },
+    {
+      "name": "延伸了解",
+      "emoji": "🗂️",
+      "order": 4,
+      "user_goal": "全面了解作者",
+      "touchpoints": [
+        "/chats",
+        "/about"
+      ],
+      "actions": [
+        "刷杂谈",
+        "看经历技能"
+      ],
+      "thoughts": [
+        "这人平时聊什么",
+        "想合作怎么联系"
+      ],
+      "emotion": "😐",
+      "pain_level": 3,
+      "quotes": [],
+      "pain_points": [
+        "杂谈低频更新显空",
+        "仅社交链接联系路径长"
+      ],
+      "opportunities": [
+        "访客侧隐藏空态",
+        "防爬邮箱拼接打磨"
+      ]
+    },
+    {
+      "name": "回访",
+      "emoji": "🔖",
+      "order": 5,
+      "user_goal": "有新内容时再遇到",
+      "touchpoints": [
+        "收藏",
+        "/feed.xml",
+        "再搜作者名"
+      ],
+      "actions": [
+        "收藏",
+        "订阅 RSS"
+      ],
+      "thoughts": [
+        "没有订阅入口只能靠搜"
+      ],
+      "emotion": "😕",
+      "pain_level": 3,
+      "quotes": [],
+      "pain_points": [
+        "无账号体系回访靠搜索再曝光",
+        "RSS 门槛高"
+      ],
+      "opportunities": [
+        "RSS + sitemap lastmod 保鲜",
+        "同标签系列站内回访环"
+      ]
+    },
+    {
+      "name": "推荐",
+      "emoji": "📣",
+      "order": 6,
+      "user_goal": "转给同事/群里",
+      "touchpoints": [
+        "OG 卡片",
+        "IM 链接预览"
+      ],
+      "actions": [
+        "复制链接",
+        "对方点开"
+      ],
+      "thoughts": [
+        "预览图好不好看"
+      ],
+      "emotion": "😊",
+      "pain_level": 2,
+      "quotes": [],
+      "pain_points": [
+        "国内 IM 对 OG 抓取不稳"
+      ],
+      "opportunities": [
+        "每页 og:image",
+        "一键复制链接微交互"
+      ]
+    }
+  ],
+  "emotion_curve": [
+    {
+      "stage_order": 1,
+      "pain_level": 2
+    },
+    {
+      "stage_order": 2,
+      "pain_level": 2
+    },
+    {
+      "stage_order": 3,
+      "pain_level": 2
+    },
+    {
+      "stage_order": 4,
+      "pain_level": 3
+    },
+    {
+      "stage_order": 5,
+      "pain_level": 3
+    },
+    {
+      "stage_order": 6,
+      "pain_level": 2
+    }
+  ],
+  "key_moments": [
+    {
+      "stage_order": 3,
+      "type": "moment-of-truth",
+      "description": "首篇文章读完/3D 交互成功=去留决策点"
+    },
+    {
+      "stage_order": 5,
+      "type": "dropout-risk",
+      "description": "无订阅钩子回访断链，依赖搜索再曝光"
+    }
+  ],
+  "hypothesis": true,
+  "journey_file": "spark-output/journey/personal-web-visitor.html",
+  "author_journey_file": "spark-output/journey/personal-web-author.html",
+  "author_journey_summary": {
+    "persona": "作者本人（唯一管理员）",
+    "stages": [
+      "起稿😊1",
+      "备素材😐2",
+      "校对预览😐2",
+      "发布推送😕3 truth+dropout",
+      "看反馈🙂2",
+      "持续运营😊1 delight"
+    ],
+    "dropout_risks": [
+      "发布推送：重建等待/失败反馈不清/token 未配置期 pending_push 无人补推"
+    ]
+  }
+}
