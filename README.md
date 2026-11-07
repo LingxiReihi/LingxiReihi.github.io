@@ -13,6 +13,11 @@
 ## 本地开发
 
 ```bash
+# 0. 一键启动前后端（首次需先完成下面的依赖/数据库初始化）
+#    自动跳过被占用的端口；Ctrl+C 同时停止
+./dev.sh
+
+# ── 手动启动（可选）──
 # 1. 后端
 cd backend
 python -m venv .venv && .venv/Scripts/pip install -r requirements.txt   # Windows；Linux/Mac 用 source .venv/bin/activate
