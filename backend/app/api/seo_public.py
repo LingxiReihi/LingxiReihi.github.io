@@ -13,6 +13,7 @@ ROBOTS = """User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 Sitemap: {site}/sitemap.xml
 """

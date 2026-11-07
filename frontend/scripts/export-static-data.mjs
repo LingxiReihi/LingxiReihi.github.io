@@ -174,7 +174,7 @@ await writeFile(path.join(OUT, 'sitemap.xml'), xml.join('\n'))
 await writeFile(path.join(OUT, 'sitemap.txt'),
   [...sections.map(([p]) => `${ORIGIN}${p}`), ...rows.map((r) => r.loc)].join('\n'))
 await writeFile(path.join(OUT, 'robots.txt'),
-  `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: ${ORIGIN}/sitemap.xml\n`)
+  `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\nContent-Signal: ai-train=no, search=yes, ai-input=no\n\nSitemap: ${ORIGIN}/sitemap.xml\n`)
 
 // ── media ──
 let mediaSummary = 'skipped'
